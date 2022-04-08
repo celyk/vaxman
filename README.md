@@ -1,12 +1,14 @@
 Gameplay:
-https://cdn.discordapp.com/attachments/656061465769410561/931005125932232724/vaxmancpp.mp4
+https://user-images.githubusercontent.com/50609684/162449645-aaa6d6f6-26bd-4fce-b93f-0754142385aa.mp4
+
+
 
 The rules:
 ![vaxman rules](https://cdn.discordapp.com/attachments/437912980169031682/931017258375995422/HQ1YMiJ1.png)
 
 
 
-ORIGINAL BUILD INSTRUCTIONS BELOW
+--- ORIGINAL BUILD INSTRUCTIONS BELOW ---
 
 
 
