@@ -61,6 +61,7 @@ class Game {
 		void handleHuntingMode();
 		void handleSleep();
 		void handleFruit();
+		void handleGhostMultiplying();
 
 		int currentScore;
 		bool checkLastPillEaten();
@@ -70,7 +71,7 @@ class Game {
 		void checkedRedraw();
 		void checkGameOver();
 
-		SDL_Surface *scoreLabel, *levelLabel;
+		SDL_Surface *scoreLabel, *ghostsLabel, *levelLabel;
 };
 
 #endif

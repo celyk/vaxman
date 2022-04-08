@@ -11,11 +11,11 @@ FunnyAnimation::FunnyAnimation():
 		animScore400  = Screen::getTextSurface(Screen::getSmallFont(), "400",    Constants::WHITE_COLOR);
 		animScore800  = Screen::getTextSurface(Screen::getSmallFont(), "800",    Constants::WHITE_COLOR);
 		animScore1600 = Screen::getTextSurface(Screen::getSmallFont(), "1600",   Constants::WHITE_COLOR);
-		pacmanName    = Screen::getTextSurface(Screen::getLargeFont(), "Pacman", Constants::YELLOW_COLOR);
-		blinkyName    = Screen::getTextSurface(Screen::getLargeFont(), "Blinky", Constants::BLINKY_COLOR);
-		pinkyName     = Screen::getTextSurface(Screen::getLargeFont(), "Pinky",  Constants::PINKY_COLOR);
-		inkyName      = Screen::getTextSurface(Screen::getLargeFont(), "Inky",   Constants::INKY_COLOR);
-		clydeName     = Screen::getTextSurface(Screen::getLargeFont(), "Clyde",  Constants::CLYDE_COLOR);
+		pacmanName    = Screen::getTextSurface(Screen::getLargeFont(), "Vaxman", Constants::YELLOW_COLOR);
+		blinkyName    = Screen::getTextSurface(Screen::getLargeFont(), "Karen", Constants::BLINKY_COLOR);
+		pinkyName     = Screen::getTextSurface(Screen::getLargeFont(), "Sharon",  Constants::PINKY_COLOR);
+		inkyName      = Screen::getTextSurface(Screen::getLargeFont(), "Stacy",   Constants::INKY_COLOR);
+		clydeName     = Screen::getTextSurface(Screen::getLargeFont(), "Becky",  Constants::CLYDE_COLOR);
 		animFruits    = new SDL_Surface*[NUM_FRUITS];
 		animScores    = new SDL_Surface*[NUM_FRUITS];
 		const char* fruits[NUM_FRUITS][2] = {{"gfx/cherry.png",     "100"},

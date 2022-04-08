@@ -76,7 +76,21 @@ class Screen {
 		int getOffsetX() { return clipRect.x; }
 		int getOffsetY() { return clipRect.y; }
 		int getScalingFactor() { return scalingFactor; }
-
+	
+		/*	
+		static void setColour(SDL_Surface *s,
+			unsigned char r,
+			unsigned char g,
+			unsigned char b);
+		*/
+		/*static void colourReplace(SDL_Surface *s,
+			unsigned char r1,
+			unsigned char g1,
+			unsigned char b1, 
+			unsigned char r2,
+			unsigned char g2,
+			unsigned char b2);	*/
+		
 		// transforms x, y coordinates from screen (e.g. by mouse event) to game coordinates,
 		// within the clipping rectangle, also considering its offset and scaling factor.
 		static int xToClipRect(int x);

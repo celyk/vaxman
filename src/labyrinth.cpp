@@ -1,6 +1,7 @@
 #include "labyrinth.h"
 #include "game.h"
 #include <sstream>
+#include<algorithm>
 #include "level.h"
 
 Labyrinth *Labyrinth::instance = NULL;
@@ -331,6 +332,17 @@ void Labyrinth::drawScoreValue() {
 void Labyrinth::drawLevelNumber() {
 	Screen::getInstance()->draw_dynamic_content(levelNumber, Constants::LEVEL_X, Constants::LEVEL_NUMBER_Y);
 }
+void Labyrinth::drawGhostNumber(int number) {
+
+	ostringstream adapter;
+	adapter.str("");
+	adapter << number;
+	SDL_Surface *ghosts_surface = Screen::getTextSurface(Screen::getVeryLargeFont(), /*charLevel*/adapter.str().c_str(), Constants::WHITE_COLOR);
+	Screen::getInstance()->draw_dynamic_content(ghosts_surface, Constants::LEVEL_X, 330);
+	
+	SDL_FreeSurface(ghosts_surface);
+	ghosts_surface = NULL;
+}
 
 void Labyrinth::increaseBonusStage() {
 	if (bonus_stage < 1600)
@@ -341,12 +353,12 @@ void Labyrinth::resetBonusStage() {
 	bonus_stage = 200;
 }
 
-void Labyrinth::addScore(int value, int show_x, int show_y) {
+void Labyrinth::addScore(int value, int show_x, int show_y, std::string str) {
 	punktestand += value;
 	// show the score at the specified position
 	ostringstream ostrScore;
 	ostrScore << value;
-	smallScore = Screen::getTextSurface(Screen::getSmallFont(), ostrScore.str().c_str(), Constants::WHITE_COLOR);
+	smallScore = Screen::getTextSurface(Screen::getSmallFont(), str.c_str(), Constants::WHITE_COLOR);
 	smallScore_x = show_x - (smallScore->w >> 1);
 	smallScore_y = show_y - (smallScore->h >> 1);
 	drawSmallScore();
@@ -369,8 +381,8 @@ void Labyrinth::addScore(int value) {
 	punktestand += value;
 }
 
-void Labyrinth::addBonusScore(int show_x, int show_y) {
-	addScore(bonus_stage, show_x, show_y);
+void Labyrinth::addBonusScore(int show_x, int show_y, std::string str) {
+	addScore(bonus_stage, show_x, show_y, str);
 }
 
 int Labyrinth::getScore() {
@@ -422,8 +434,8 @@ void Labyrinth::hideInitText() {
 }
 
 void Labyrinth::resetAllFigures() {
-	for(int i = 0; i < Constants::TOTAL_NUM_GHOSTS; ++i)
-		Ghost::getGhostArray()[i]->reset();
+	for(int i = 0; i < Ghost::getNumGhosts(); ++i)
+		Ghost::getGhostArray()[i]->set_hunter(Figur::PACMAN);//Ghost::getGhostArray()[i]->reset();
 	Ghost::getGhostArray()[0]->set_leader(1);  // Blinky is the reference for redrawing
 	Pacman::getInstance()->reset();
 }
@@ -440,6 +452,7 @@ void Labyrinth::nextLevel() {
 
 void Labyrinth::resetLevel(int level) {
 	Screen::getInstance()->clear();
+	Ghost::cleanUpGhostArray();
 	hideFruit();
 	resetAllFigures();
 	if (level >= 1)
@@ -628,4 +641,11 @@ SDL_Surface *Labyrinth::getBackground() {
 
 void Labyrinth::setLabyrinthObserver(LabyrinthObserver* labyrinthObserver) {
 	this->vec_observer.push_back(labyrinthObserver);
+}
+void Labyrinth::removeLabyrinthObserver(LabyrinthObserver* lo) {
+	std::vector<LabyrinthObserver*>::iterator it = std::find(vec_observer.begin(), vec_observer.end(), lo);
+	if(it != vec_observer.end()){
+		*it = vec_observer.back();
+		vec_observer.pop_back();
+	}
 }

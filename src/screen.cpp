@@ -205,7 +205,42 @@ SDL_Surface *Screen::loadImage(const char *filename, int transparentColor) {
 	SDL_FreeSurface(temp);
 	return surface;
 }
+/*
+Uint8* GetPixel8_nolock(SDL_Surface *surface, int x, int y){
+    Uint8 *pixel = (Uint8*)surface->pixels;
+    pixel += (y * surface->pitch) + (x * sizeof(Uint8));
+    
+    Uint8 tmp[4];
+    memcpy(tmp, pixel, sizeof(Uint32));
+    return tmp;
+}
+void PutPixel8_nolock(SDL_Surface *surface, int x, int y, Uint32 color){
+    Uint8* pixel = (Uint8*)surface->pixels;
+    pixel += (y*surface->pitch) + x;
+    memcpy(pixel, &color, sizeof(Uint32));
+}
 
+void Screen::setColour(
+	SDL_Surface *s,
+	unsigned char r,
+	unsigned char g,
+	unsigned char b)
+{		
+
+	SDL_LockSurface(s);	
+	for(int y=0; y<s->h; y++) {		
+		for(int x=0; x<s->w; x++) {		
+			Uint32 col = SDL_MapRGBA(s->format, r, g, b, 255);
+			PutPixel8_nolock(s, x, y, col);		
+		}	
+	}	
+	SDL_UnlockSurface(s);
+	
+	//SDL_FillRect(s, NULL, SDL_MapRGB(s->format, r2, g2, b2));
+}*/
+/*
+void sprite::colorReplace(unsigned char r1,unsigned char g1,unsigned char b1,						unsigned char r2,unsigned char g2,unsigned char b2){	int coltemp1 = SDL_MapRGB(s->format,r1,g1,b1);	int coltemp2 = SDL_MapRGB(s->format,r2,g2,b2);	SDL_LockSurface(s);	for(int y=0;y<s->h;y++) {		for(int x=0;x<s->w;x++) {			if(getpixel(x,y) == coltemp1)				putpixel(x,y,coltemp2);		}	}	SDL_UnlockSurface(s);}
+*/
 TTF_Font *Screen::loadFont(const char *filename, int ptSize) {
 	char filePath[256];
 	getFilePath(filePath, filename);

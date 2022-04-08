@@ -32,15 +32,15 @@ Pacman::Pacman():
 	wechsel_y = Constants::PACMAN_INITIAL_Y;
 	direction = LEFT;
 	direction_pre = LEFT;
-	pacman_normal   = Screen::loadImage("gfx/pacman.png", 255);
-	pacman_links_1  = Screen::loadImage("gfx/pacman_links_1.png", 255);
-    pacman_links_2  = Screen::loadImage("gfx/pacman_links_2.png", 255);
-    pacman_oben_1   = Screen::loadImage("gfx/pacman_oben_1.png", 255);
-    pacman_oben_2   = Screen::loadImage("gfx/pacman_oben_2.png", 255);
-    pacman_rechts_1 = Screen::loadImage("gfx/pacman_rechts_1.png", 255);
-    pacman_rechts_2 = Screen::loadImage("gfx/pacman_rechts_2.png", 255);
-    pacman_unten_1  = Screen::loadImage("gfx/pacman_unten_1.png", 255);
-    pacman_unten_2  = Screen::loadImage("gfx/pacman_unten_2.png", 255);
+	pacman_normal   = Screen::loadImage("gfx/pacman.png", 0);
+	pacman_links_1  = Screen::loadImage("gfx/pacman_links_1.png", 0);
+    pacman_links_2  = Screen::loadImage("gfx/pacman_links_2.png", 0);
+    pacman_oben_1   = Screen::loadImage("gfx/pacman_oben_1.png", 0);
+    pacman_oben_2   = Screen::loadImage("gfx/pacman_oben_2.png", 0);
+    pacman_rechts_1 = Screen::loadImage("gfx/pacman_rechts_1.png", 0);
+    pacman_rechts_2 = Screen::loadImage("gfx/pacman_rechts_2.png", 0);
+    pacman_unten_1  = Screen::loadImage("gfx/pacman_unten_1.png", 0);
+    pacman_unten_2  = Screen::loadImage("gfx/pacman_unten_2.png", 0);
 	// initialize all pacman images
     ar_pacman_links[0] = pacman_links_1;
     ar_pacman_links[1] = pacman_links_2;
@@ -62,22 +62,22 @@ Pacman::Pacman():
     ar_pacman_unten[2] = pacman_unten_1;
     ar_pacman_unten[3] = pacman_normal;
 
-    ar_pacman_die[0]  = Screen::loadImage("gfx/pacman_die_1.png",  255);
-    ar_pacman_die[1]  = Screen::loadImage("gfx/pacman_die_2.png",  255);
-    ar_pacman_die[2]  = Screen::loadImage("gfx/pacman_die_3.png",  255);
-    ar_pacman_die[3]  = Screen::loadImage("gfx/pacman_die_4.png",  255);
-    ar_pacman_die[4]  = Screen::loadImage("gfx/pacman_die_5.png",  255);
-    ar_pacman_die[5]  = Screen::loadImage("gfx/pacman_die_6.png",  255);
-	ar_pacman_die[6]  = Screen::loadImage("gfx/pacman_die_10.png", 255);
-	ar_pacman_die[7]  = Screen::loadImage("gfx/pacman_die_10.png", 255);
-	ar_pacman_die[8]  = Screen::loadImage("gfx/pacman_die_10.png", 255);
-	ar_pacman_die[9]  = Screen::loadImage("gfx/pacman_die_7.png",  255);
-    ar_pacman_die[10] = Screen::loadImage("gfx/pacman_die_8.png",  255);
-    ar_pacman_die[11] = Screen::loadImage("gfx/pacman_die_9.png",  255);
-    ar_pacman_die[12] = Screen::loadImage("gfx/pacman_die_7.png",  255);
-    ar_pacman_die[13] = Screen::loadImage("gfx/pacman_die_8.png",  255);
-    ar_pacman_die[14] = Screen::loadImage("gfx/pacman_die_9.png",  255);
-    ar_pacman_die[15] = Screen::loadImage("gfx/pacman_die_9.png",  255);
+    ar_pacman_die[0]  = Screen::loadImage("gfx/pacman_die_1.png",  0);
+    ar_pacman_die[1]  = Screen::loadImage("gfx/pacman_die_2.png",  0);
+    ar_pacman_die[2]  = Screen::loadImage("gfx/pacman_die_3.png",  0);
+    ar_pacman_die[3]  = Screen::loadImage("gfx/pacman_die_4.png",  0);
+    ar_pacman_die[4]  = Screen::loadImage("gfx/pacman_die_5.png",  0);
+    ar_pacman_die[5]  = Screen::loadImage("gfx/pacman_die_6.png",  0);
+	ar_pacman_die[6]  = Screen::loadImage("gfx/pacman_die_10.png", 0);
+	ar_pacman_die[7]  = Screen::loadImage("gfx/pacman_die_10.png", 0);
+	ar_pacman_die[8]  = Screen::loadImage("gfx/pacman_die_10.png", 0);
+	ar_pacman_die[9]  = Screen::loadImage("gfx/pacman_die_7.png",  0);
+    ar_pacman_die[10] = Screen::loadImage("gfx/pacman_die_8.png",  0);
+    ar_pacman_die[11] = Screen::loadImage("gfx/pacman_die_9.png",  0);
+    ar_pacman_die[12] = Screen::loadImage("gfx/pacman_die_7.png",  0);
+    ar_pacman_die[13] = Screen::loadImage("gfx/pacman_die_8.png",  0);
+    ar_pacman_die[14] = Screen::loadImage("gfx/pacman_die_9.png",  0);
+    ar_pacman_die[15] = Screen::loadImage("gfx/pacman_die_9.png",  0);
 
 	pacman_sf = ar_pacman_links[0];
 }
@@ -99,6 +99,8 @@ Pacman::~Pacman() {
 void Pacman::draw() {
 	if (visible) {
 		animate();
+		SDL_SetSurfaceColorMod(pacman_sf, colour[0], colour[1], colour[2]);
+		SDL_SetSurfaceAlphaMod(pacman_sf, colour[3]);
 		Screen::getInstance()->draw(pacman_sf, x, y);
 	}
 }
@@ -325,24 +327,24 @@ SDL_Surface* Pacman::get_Surface() const {
 	return pacman_sf;
 }
 
-bool Pacman::ghostTouched() const{
+Ghost* Pacman::ghostTouched() const{
 	int x_left_pacman = this->x;
 	int y_up_pacman = this->y;
 	int x_right_pacman = this->x + this->get_Surface()->w;
 	int y_down_pacman = this->y + this->get_Surface()->h;
 	int touch_result = 0;
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < Ghost::getNumGhosts(); i++) {
     	int x_real_ghost = Ghost::getGhostArray()[i]->x + (int)(Ghost::getGhostArray()[i]->get_Surface()->w * 0.5);
 		int y_real_ghost = Ghost::getGhostArray()[i]->y + (int)(Ghost::getGhostArray()[i]->get_Surface()->h * 0.5);
 		if ((x_real_ghost >= x_left_pacman) && (x_real_ghost <= x_right_pacman) && (y_real_ghost >= y_up_pacman) && (y_real_ghost <= y_down_pacman)) {
 			touch_result = Ghost::getGhostArray()[i]->touched();
 			if (touch_result != 0) {
-				return true;
+				return Ghost::getGhostArray()[i];
 			}
 		}
 	}
-	return false;
+	return NULL;
 }
 
 void Pacman::check_eat_pills() {
@@ -360,9 +362,9 @@ void Pacman::check_eat_pills() {
 				Labyrinth::getInstance()->removePill(i);
 				Sounds::getInstance()->playMunch();
 				if(Labyrinth::getInstance()->pillen[i].superpille) {
-					for(int j = 0; j < 4; ++j) {
+					for(int j = 0; j < Ghost::getNumGhosts(); ++j) {
 						if(Ghost::getGhostArray()[j]->get_hunter() != NONE)  // eaten ghosts still have to return to the castle
-							Ghost::getGhostArray()[j]->set_hunter(PACMAN);
+							Ghost::getGhostArray()[j]->set_hunter(GHOST);
 					}
 					Game::getInstance()->startHuntingMode();
 					Labyrinth::getInstance()->addScore(Constants::SUPER_PILL_SCORE);
@@ -384,7 +386,7 @@ void Pacman::check_eat_pills() {
 		if(Labyrinth::getInstance()->fruitIsDisplayed() && this->y == Constants::FRUIT_Y && ((this->x>=Constants::FRUIT_X && this->last_x<=Constants::FRUIT_X) || (this->x<=Constants::FRUIT_X && this->last_x>=Constants::FRUIT_X))) {
 			Sounds::getInstance()->playSingleSound(Sounds::FRUIT);
 			Labyrinth::getInstance()->hideFruit();
-			Labyrinth::getInstance()->addScore(Labyrinth::getInstance()->getFruitBonus(), Constants::FRUIT_X + 10, Constants::FRUIT_Y + 10);
+			Labyrinth::getInstance()->addScore(Labyrinth::getInstance()->getFruitBonus(), Constants::FRUIT_X + 10, Constants::FRUIT_Y + 10, "YUMMY!");
 			setVisibility(false);
 			Game::getInstance()->sleep(Constants::PAUSE_AFTER_BONUS_SCORE);
 		}
@@ -399,10 +401,10 @@ int Pacman::is_dying() const {
 	return dying;
 }
 
-int Pacman::die_animation(bool skipSound) {
+int Pacman::die_animation(bool skipSound, bool skipAnimation) {
 	if(dying > 1)
 		return dying--;
-	else {
+	else if(!skipAnimation) {
 		if(!die_counter && !skipSound)
 			Sounds::getInstance()->playSingleSound(Sounds::DYING);
 		this->die_pic(die_counter++);
@@ -412,6 +414,7 @@ int Pacman::die_animation(bool skipSound) {
 		}
 		return die_counter;
 	}
+	else return die_counter=0;
 }
 
 void Pacman::addUpdateRect() {

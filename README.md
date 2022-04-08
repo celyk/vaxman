@@ -1,3 +1,12 @@
+Gameplay:
+![alt text](https://cdn.discordapp.com/attachments/656061465769410561/931005125932232724/vaxmancpp.mp4)
+
+The rules:
+![alt text](https://cdn.discordapp.com/attachments/437912980169031682/931017258375995422/HQ1YMiJ1.png)
+
+ORIGINAL BUILD INSTRUCTIONS BELOW
+
+
 Pacman
 ======
 

@@ -1,46 +1,67 @@
 #include "ghost_figur.h"
 #include "game.h"
+#include<algorithm>
 #include <stdlib.h>
 
 int Ghost::was_moving_leader = 1;
-Ghost **Ghost::ghostArray = NULL;
+std::vector<Ghost*> Ghost::ghostArray;
+
+
+Ghost* Ghost::createGhost(std::string name, int x, int y, int dir)
+{
+	if(name == "Blinky") ghostArray.push_back( new Blinky(name, x, y, dir) );
+	else if(name == "Pinky") ghostArray.push_back( new Pinky(name, x, y, dir) );
+	else if(name == "Inky" ) ghostArray.push_back( new Inky(name, x, y, dir) );
+	else if(name == "Clyde") ghostArray.push_back( new Clyde(name, x, y, dir) );
+	
+	return ghostArray.back();
+}
+void Ghost::killGhost(Ghost* ghost) {
+	std::vector<Ghost*>::iterator it = std::find(ghostArray.begin(), ghostArray.end(), ghost);
+	if(it != ghostArray.end()){
+		delete *it;
+		*it = ghostArray.back();
+		ghostArray.pop_back();
+	}
+	Labyrinth::getInstance()->removeLabyrinthObserver(ghost);
+}
 
 Ghost **Ghost::getGhostArray() {
-	if (!ghostArray) {
-		ghostArray = new Ghost*[Constants::TOTAL_NUM_GHOSTS];
-		ghostArray[0] = Blinky::getInstance();
-		ghostArray[1] = Pinky::getInstance();
-		ghostArray[2] = Inky::getInstance();
-		ghostArray[3] = Clyde::getInstance();
+	if (ghostArray.empty()) {
+		createGhost("Blinky", Constants::BLINKY_INITIAL_X, Constants::BLINKY_INITIAL_Y, Figur::LEFT);
+		createGhost("Pinky", Constants::PINKY_INITIAL_X, Constants::PINKY_INITIAL_Y);
+		createGhost("Inky", Constants::INKY_INITIAL_X, Constants::INKY_INITIAL_Y);
+		createGhost("Clyde", Constants::CLYDE_INITIAL_X, Constants::CLYDE_INITIAL_Y);
 	}
-	return ghostArray;
-}
-void Ghost::cleanUpGhostArray() {
-	if (ghostArray) {
-		Blinky::cleanUpInstance();
-		Pinky::cleanUpInstance();
-		Inky::cleanUpInstance();
-		Clyde::cleanUpInstance();
-		delete [] ghostArray;
-		ghostArray = NULL;
-	}
+	return ghostArray.data();
 }
 
-Ghost::Ghost(int init_x, int init_y, int init_intelligence,
+size_t Ghost::getNumGhosts() {
+	return ghostArray.size();
+}
+
+void Ghost::cleanUpGhostArray() {
+	while(getNumGhosts() > 0)
+		Ghost::killGhost(ghostArray.back());
+}
+
+Ghost::Ghost(std::string ghost_name, int init_x, int init_y, int init_intelligence,
              Direction init_direction, int init_up_down, int ghost_ident):
 	Figur(init_x, init_y, Constants::GHOSTS_V_NORMAL),
+        name(ghost_name),
 	its_leader(0),
 	initial_intelligence(init_intelligence),
 	initial_direction(init_direction),
 	initial_up_down(init_up_down),
 	ghost_ident(ghost_ident),
 	idxCurrentRail(-1),  // should first be determined
-	panicMode(0)
+	panicMode(0),
+	ticks_on_create(SDL_GetTicks())
 {
 	direction = init_direction;
 	intelligence = init_intelligence;
 	up_down = init_up_down;
-	set_hunter(GHOST);
+	set_hunter(PACMAN);
 	// Surfaces
 	if(ghost_ident == BLINKY) {
 		ghost_1 = Screen::loadImage("gfx/blinky_1.png", 255);
@@ -97,7 +118,7 @@ void Ghost::draw() {
 	if (this->visible) {
 		if (this->get_hunter() != NONE)
 			Screen::getInstance()->draw(this->ghost_sf, this->x, this->y);
-		if (this->get_hunter() != PACMAN) {
+		if (this->get_hunter() == PACMAN || true) {
 			switch(this->get_direction()) {
 				case LEFT:
 					Screen::getInstance()->draw(augen_0, this->x, this->y);
@@ -129,7 +150,7 @@ void Ghost::set_leader(bool leader) {
 }
 
 void Ghost::set_leader() {
-	for(int i = 0; i < Constants::TOTAL_NUM_GHOSTS; ++i) {
+	for(int i = 0; i < getNumGhosts(); ++i) {
 		if(getGhostArray()[i]->getGhostIdent() == this->getGhostIdent())
 			getGhostArray()[i]->set_leader(true);
 		else
@@ -287,7 +308,7 @@ void Ghost::move_on_rails(int ms, Rail **ar_s) {
 			sammel_counter = 1;
 			// make an eyes-only ghost normal again
 			if (get_hunter() == NONE) {
-				set_hunter(GHOST);
+				set_hunter(PACMAN);
 				Game::getInstance()->checkMusic();
 			}
 		} else if (up_down) {
@@ -373,7 +394,7 @@ void Ghost::reset() {
 	direction = initial_direction;
 	intelligence = initial_intelligence;
 	up_down = initial_up_down;
-	this->set_hunter(GHOST);
+	this->set_hunter(PACMAN);
 	if (ghost_ident == BLINKY)
 		idxCurrentRail = 16;
 	if (ghost_ident == PINKY)
@@ -398,10 +419,10 @@ Figur::Hunter Ghost::get_hunter() const {
 }
 
 void Ghost::set_hunter(Hunter hunter) {
-	if(hunter == PACMAN) {
+	if(hunter == Figur::GHOST) {
 		this->set_speed(Constants::GHOSTS_V_SLOW);
-		ar_ghost[0] = escape_1;
-		ar_ghost[1] = escape_2;
+		//ar_ghost[0] = escape_1;
+		//ar_ghost[1] = escape_2;
 	} else {
 		this->set_speed(panicMode ? Constants::GHOSTS_V_FAST : Constants::GHOSTS_V_NORMAL);
 		ar_ghost[0] = ghost_1;
@@ -419,13 +440,15 @@ bool Ghost::touched() {
 		set_leader();
 		setVisibility(false);
 		Pacman::getInstance()->setVisibility(false);
-		Labyrinth::getInstance()->addBonusScore(x + (ghost_sf->w >> 1), y + (ghost_sf->h >> 1));
+		Labyrinth::getInstance()->addBonusScore(x + (ghost_sf->w >> 1), y + (ghost_sf->h >> 1), "VAX!");
 		Labyrinth::getInstance()->increaseBonusStage();
 		Game::getInstance()->sleep(Constants::PAUSE_AFTER_BONUS_SCORE);
 		Sounds::getInstance()->playSingleSound(Sounds::EAT_GHOST);
 	}
-	if(get_hunter() == NONE)
+	if(get_hunter() == NONE){
+		killGhost(this);
 		return false;  // no problem for pacman
+	}
 	return true;
 }
 
@@ -446,73 +469,23 @@ void Ghost::setPanicMode(int set) {
 }
 
 // --- BLINKY ---
-Blinky *Blinky::instance = NULL;
-Blinky *Blinky::getInstance() {
-	if (!instance) {
-		instance = new Blinky();
-	}
-	return instance;
-}
-void Blinky::cleanUpInstance() {
-	if (instance) {
-		delete instance;
-		instance = NULL;
-	}
-}
-Blinky::Blinky():
-	Ghost(Constants::BLINKY_INITIAL_X, Constants::BLINKY_INITIAL_Y, Constants::INTELLIGENCE_BLINKY, Figur::LEFT, Constants::INIT_UP_DOWN_BLINKY, Ghost::BLINKY)
+
+Blinky::Blinky(std::string name, int x, int y, int dir):
+	Ghost(name, x, y, Constants::INTELLIGENCE_BLINKY, (Figur::Direction)dir, Constants::INIT_UP_DOWN_BLINKY, Ghost::BLINKY)
 {}
 
 // --- PINKY ---
-Pinky *Pinky::instance = NULL;
-Pinky *Pinky::getInstance() {
-	if (!instance) {
-		instance = new Pinky();
-	}
-	return instance;
-}
-void Pinky::cleanUpInstance() {
-	if (instance) {
-		delete instance;
-		instance = NULL;
-	}
-}
-Pinky::Pinky():
-	Ghost(Constants::PINKY_INITIAL_X, Constants::PINKY_INITIAL_Y, Constants::INTELLIGENCE_PINKY, Figur::UP, Constants::INIT_UP_DOWN_PINKY, Ghost::PINKY)
-{}
 
+Pinky::Pinky(std::string name, int x, int y, int dir):
+	Ghost(name, x, y, Constants::INTELLIGENCE_PINKY, (Figur::Direction)dir, Constants::INIT_UP_DOWN_PINKY, Ghost::PINKY)
+{}
 // --- INKY ---
-Inky *Inky::instance = NULL;
-Inky *Inky::getInstance() {
-	if (!instance) {
-		instance = new Inky();
-	}
-	return instance;
-}
-void Inky::cleanUpInstance() {
-	if (instance) {
-		delete instance;
-		instance = NULL;
-	}
-}
-Inky::Inky():
-	Ghost(Constants::INKY_INITIAL_X, Constants::INKY_INITIAL_Y, Constants::INTELLIGENCE_INKY, Figur::UP, Constants::INIT_UP_DOWN_INKY, Ghost::INKY)
+
+Inky::Inky(std::string name, int x, int y, int dir):
+	Ghost(name, x, y, Constants::INTELLIGENCE_INKY, (Figur::Direction)dir, Constants::INIT_UP_DOWN_INKY, Ghost::INKY)
 {}
 
 // --- CLYDE ---
-Clyde *Clyde::instance = NULL;
-Clyde *Clyde::getInstance() {
-	if (!instance) {
-		instance = new Clyde();
-	}
-	return instance;
-}
-void Clyde::cleanUpInstance() {
-	if (instance) {
-		delete instance;
-		instance = NULL;
-	}
-}
-Clyde::Clyde():
-	Ghost(Constants::CLYDE_INITIAL_X, Constants::CLYDE_INITIAL_Y, Constants::INTELLIGENCE_CLYDE, Figur::UP, Constants::INIT_UP_DOWN_CLYDE, Ghost::CLYDE)
+Clyde::Clyde(std::string name, int x, int y, int dir):
+	Ghost(name, x, y, Constants::INTELLIGENCE_CLYDE, (Figur::Direction)dir, Constants::INIT_UP_DOWN_CLYDE, Ghost::CLYDE)
 {}

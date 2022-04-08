@@ -10,6 +10,6 @@ class MenuAbout : public Menu {
 	private:
 		enum Entries {BACK};
 		int handleSelection();
-		SDL_Surface *idea, *coding, *coding2;
+		SDL_Surface *idea, *coding, *coding2, *modding;
 };
 #endif

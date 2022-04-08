@@ -19,7 +19,7 @@ MenuMain::MenuMain() {
 		SDL_Surface *icon = Screen::loadImage("gfx/pacman_desktop.png", 0);
 		SDL_SetWindowIcon(Screen::getInstance()->getWindow(), icon);
 		SDL_FreeSurface(icon);
-		appTitle1 = Screen::getTextSurface(Screen::getHugeFont(), "Pa", Constants::WHITE_COLOR);
+		appTitle1 = Screen::getTextSurface(Screen::getHugeFont(), "Vax", Constants::WHITE_COLOR);
 		appTitle2 = Screen::getTextSurface(Screen::getHugeFont(), "man", Constants::WHITE_COLOR);
 		titlePacman = Screen::loadImage("gfx/title_pacman.png", 0);
 		std::string str_version = "version ";
@@ -57,7 +57,7 @@ void MenuMain::drawTitle() {
 	Screen::getInstance()->draw(appTitle2, rect.x, 30);
 	rect.x = (short int) (rect.x - titlePacman->w);
 	Screen::getInstance()->draw(titlePacman, rect.x, 40);
-	Screen::getInstance()->draw(version, (short int)(320 - (version->w >> 1)), 140);
+	//Screen::getInstance()->draw(version, (short int)(320 - (version->w >> 1)), 140);
 }
 
 int MenuMain::show() {

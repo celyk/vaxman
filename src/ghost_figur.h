@@ -12,9 +12,18 @@
 
 class Ghost : public Figur, public LabyrinthObserver {
 	public:
+		std::string name;
+		Uint32 ticks_on_create;
+	
+		static Ghost* createGhost(std::string ghost_name, int x_pos = 0, int y_pos = 0, int direction = Figur::UP);
+		static void killGhost(Ghost* ghost);
 		static Ghost **getGhostArray();
+		static size_t getNumGhosts();
 		static void cleanUpGhostArray();
 
+
+		virtual void cleanUpInstance(){};
+		
 		/* draw ghost */
 		virtual void draw();
 
@@ -76,12 +85,12 @@ class Ghost : public Figur, public LabyrinthObserver {
 		
 	protected:
 		/* constructor and destructor */
-		Ghost(int init_x, int init_y, int init_intelligence,
+		Ghost(std::string ghost_name, int init_x, int init_y, int init_intelligence,
 		      Direction init_direction, int init_up_down, int ghost_ident);
 		virtual ~Ghost();
 
 	private:
-		static int numGhosts;                    // current number of ghosts
+		//static int numGhosts;                    // current number of ghosts
 		bool its_leader;
 		int up_down;
 		Direction initial_direction;
@@ -95,49 +104,30 @@ class Ghost : public Figur, public LabyrinthObserver {
 		SDL_Surface *augen_0, *augen_1, *augen_2, *augen_3;
 		SDL_Surface *escape_1, *escape_2, *escape_white_1, *escape_white_2;
 		int idxCurrentRail;
-		static Ghost **ghostArray;
+		
+		static std::vector<Ghost*> ghostArray;
 		void setPanicMode(int set);
 		int panicMode;
 };
 
 class Blinky : public Ghost {
 	public:
-		static Blinky *getInstance();
-		static void cleanUpInstance();
-	private:
-		static Blinky *instance;
-		Blinky();
-		virtual ~Blinky() {}
+		Blinky(std::string name, int x, int y, int dir);
 };
 
 class Pinky : public Ghost {
 	public:
-		static Pinky *getInstance();
-		static void cleanUpInstance();
-	private:
-		static Pinky *instance;
-		Pinky();
-		virtual ~Pinky() {}
+		Pinky(std::string name, int x, int y, int dir);
 };
 
 class Inky : public Ghost {
 	public:
-		static Inky *getInstance();
-		static void cleanUpInstance();
-	private:
-		static Inky *instance;
-		Inky();
-		virtual ~Inky() {}
+		Inky(std::string name, int x, int y, int dir);
 };
 
 class Clyde : public Ghost {
 	public:
-		static Clyde *getInstance();
-		static void cleanUpInstance();
-	private:
-		static Clyde *instance;
-		Clyde();
-		virtual ~Clyde() {}
+		Clyde(std::string name, int x, int y, int dir);
 };
 
 #endif

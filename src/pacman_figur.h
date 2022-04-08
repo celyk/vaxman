@@ -6,6 +6,8 @@
 #include "figur.h"
 #include "rail.h"
 
+class Ghost;
+
 class Pacman : public Figur {
 	public:
 		static Pacman *getInstance();
@@ -45,7 +47,7 @@ class Pacman : public Figur {
 		void reset();
 
 		// collision handling pacman <-> ghosts
-		bool ghostTouched() const;
+		Ghost* ghostTouched() const;
 
 		// return the surface
 		SDL_Surface* get_Surface() const;
@@ -55,7 +57,7 @@ class Pacman : public Figur {
 		// pacman dies
 		void set_dying(int dying);
 		int is_dying() const;
-		int die_animation(bool skipSound = false);
+		int die_animation(bool skipSound = false, bool skipAnimation = false);
 
 		// deprecated - has been inlined to draw(), so no longer needs to be called
 		virtual void addUpdateRect();
@@ -72,6 +74,8 @@ class Pacman : public Figur {
 		// set the lives
 		void setRemainingLives(int lives);
 
+		const Uint8 colour_default[4] = {255, 247, 10, 255};
+		Uint8 colour[4] = {255, 247, 10, 255};
 	private:
 		// constructor and destructor
 		Pacman();

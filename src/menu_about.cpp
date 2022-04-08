@@ -6,6 +6,7 @@ MenuAbout::MenuAbout():
 		idea = Screen::getTextSurface(Screen::getLargeFont(), "idea: Toro Iwatani - Namco", Constants::GRAY_COLOR);
 		coding = Screen::getTextSurface(Screen::getLargeFont(), "coding: Martin Prussak", Constants::GRAY_COLOR);
 		coding2 = Screen::getTextSurface(Screen::getLargeFont(), "         Daniel Wuerfel", Constants::GRAY_COLOR);
+		modding = Screen::getTextSurface(Screen::getLargeFont(), "modded by: Kyle Connolly", Constants::GRAY_COLOR);
 		addMenuItem("back");
 }
 MenuAbout::~MenuAbout() {
@@ -18,9 +19,10 @@ void MenuAbout::draw(bool updateAll) {
 	Screen::getInstance()->clear();
 	drawTitle();
 	drawMenuItems();
-	Screen::getInstance()->draw(idea, 320 - (idea->w >> 1), 230 - (idea->h >> 1));
-	Screen::getInstance()->draw(coding, 320 - (coding->w >> 1), 300 - (coding->h >> 1));
-	Screen::getInstance()->draw(coding2, 320 - (coding2->w >> 1), 340 - (coding2->h >> 1));
+	Screen::getInstance()->draw(idea, 320 - (idea->w >> 1), 200 - (idea->h >> 1));
+	Screen::getInstance()->draw(coding, 320 - (coding->w >> 1), 260 - (coding->h >> 1));
+	Screen::getInstance()->draw(coding2, 320 - (coding2->w >> 1), 300 - (coding2->h >> 1));
+	Screen::getInstance()->draw(modding, 320 - (modding->w >> 1), 360 - (modding->h >> 1));
 	if (updateAll)
 		Screen::getInstance()->addUpdateClipRect();
 	Screen::getInstance()->Refresh();

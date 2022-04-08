@@ -34,7 +34,8 @@ class Labyrinth {
 
 		void drawScoreValue();
 		void drawLevelNumber();
-
+		void drawGhostNumber(int number);
+		
 		Pille pillen[Constants::NUMBER_PILLS];  // TODO: hide (currently used within Pacman::check_eat_pills)
 		Rail *array_rails[Constants::NUMBER_RAILS];  // TODO: hide (currently used within Pacman::move and Pacman::check_eat_pills)
 
@@ -44,12 +45,12 @@ class Labyrinth {
 
 		// adds a value to the player's score
 		// TODO: move both addScore methods to Player, create new method setSmallScore(value,x,y) here
-		void addScore(int value, int show_x, int show_y);  // use this method if the score should be displayed
+		void addScore(int value, int show_x, int show_y, std::string str);  // use this method if the score should be displayed
 		void addScore(int value);                          // use this method if the score should not be displayed
 		void drawSmallScore();
 		void hideSmallScore();
 		// adds the current bonus stage to the player's score
-		void addBonusScore(int show_x, int show_y);  // TODO: move to Player
+		void addBonusScore(int show_x, int show_y, std::string str);  // TODO: move to Player
 		// retrieve current score
 		int getScore();  // TODO: move to Player
 		int getLevelNumber();
@@ -101,6 +102,7 @@ class Labyrinth {
 		SDL_Surface *get_superpill_sf();
 
 		void setLabyrinthObserver(LabyrinthObserver* labyrinthObserver);
+		void removeLabyrinthObserver(LabyrinthObserver* labyrinthObserver);
 
 	private:
 		static Labyrinth *instance;
