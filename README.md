@@ -7,6 +7,8 @@ https://user-images.githubusercontent.com/50609684/162453330-9e287150-c7f2-42cf-
 
 
 The rules:
+
+
 ![vaxman rules](https://cdn.discordapp.com/attachments/437912980169031682/931017258375995422/HQ1YMiJ1.png)
 
 
