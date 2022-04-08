@@ -1,5 +1,5 @@
 Gameplay:
-![vaxman](https://cdn.discordapp.com/attachments/656061465769410561/931005125932232724/vaxmancpp.mp4)
+https://cdn.discordapp.com/attachments/656061465769410561/931005125932232724/vaxmancpp.mp4
 
 The rules:
 ![vaxman rules](https://cdn.discordapp.com/attachments/437912980169031682/931017258375995422/HQ1YMiJ1.png)
